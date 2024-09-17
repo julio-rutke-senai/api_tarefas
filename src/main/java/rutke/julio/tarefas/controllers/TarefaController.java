@@ -1,6 +1,7 @@
 package rutke.julio.tarefas.controllers;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import rutke.julio.tarefas.entities.Tarefa;
+import rutke.julio.tarefas.entities.dtos.CriarTarefaDTO;
 import rutke.julio.tarefas.services.TarefaService;
 
 @RestController
@@ -39,7 +41,7 @@ public class TarefaController {
 	}
 	
 	@PostMapping("/add")
-	public ResponseEntity<?> criarTarefa(@RequestBody Tarefa tarefa){
+	public ResponseEntity<?> criarTarefa(@RequestBody CriarTarefaDTO tarefa){
 		try {
 			Tarefa tarefaCriada = tarefaService.criarTarefa(tarefa);
 			return ResponseEntity.ok(tarefa);
@@ -82,8 +84,12 @@ public class TarefaController {
 	@GetMapping("/buscar/{codigo}")
 	public ResponseEntity<?> buscarTarefaPorCodigo(@PathVariable Long codigo){
 		try {
-			Tarefa tarefa = tarefaService.listarTarefaPorCodigo(codigo);
-			return ResponseEntity.ok(tarefa);
+			Optional<Tarefa> tarefa = tarefaService.listarTarefaPorCodigo(codigo);
+			if(Optional.ofNullable(tarefa).isPresent())
+				return ResponseEntity.ok(tarefa.get());
+			else
+				return ResponseEntity.notFound().build();
+			
 		}catch(Exception ex) {
 			return new ResponseEntity("Erro de Consulta", HttpStatusCode.valueOf(504));
 		}

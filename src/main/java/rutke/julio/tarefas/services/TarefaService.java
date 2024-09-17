@@ -1,60 +1,68 @@
 package rutke.julio.tarefas.services;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import rutke.julio.tarefas.entities.Tarefa;
+import rutke.julio.tarefas.entities.Usuario;
+import rutke.julio.tarefas.entities.dtos.CriarTarefaDTO;
+import rutke.julio.tarefas.repositories.TarefaRepository;
 
 @Service
 public class TarefaService {
 	
-	private List<Tarefa> tarefas;
+	private TarefaRepository tarefaRepository;
+	private UsuarioService usuarioService;
 	
-	public TarefaService() {
-		tarefas = new ArrayList<>();
+	public TarefaService(TarefaRepository tarefaRepository, UsuarioService usuarioService) {
+		this.tarefaRepository = tarefaRepository;
+		this.usuarioService = usuarioService;
 	}
 	
-	public Tarefa criarTarefa(Tarefa tarefa) {
-		tarefas.add(tarefa);
+	public Tarefa criarTarefa(CriarTarefaDTO tarefaDTO) throws Exception {
+		
+		Tarefa tarefa = new Tarefa();
+		tarefa.setDescricao(tarefaDTO.getDescricao());
+		tarefa.setStatus(tarefaDTO.getStatus());
+		
+		Optional<Usuario> usuario = usuarioService.listarUsuarioPorCodigo(tarefaDTO.getUsuario());
+		
+		if(Optional.ofNullable(usuario).isPresent()) {
+			tarefa.setUsuario(usuario.get());
+			tarefaRepository.save(tarefa);
+		}else {
+			throw new Exception("Usuário não encontrado");
+		}
 		return tarefa;
 	}
 	
 	public Tarefa atualizarTarefa(Tarefa tarefa) {
-		tarefas.stream().forEach(t -> {
-			if(t.getCodigo() == tarefa.getCodigo()) {
-				t.setDescricao(tarefa.getDescricao());
-				t.setStatus(tarefa.getStatus());
-			}
-		});
-		
+		tarefaRepository.save(tarefa);
 		return tarefa;
 	}
 	
 	public List<Tarefa> listarTarefas(){
-		return tarefas;
+		return tarefaRepository.findAll();
 	}
 	
-	public Tarefa listarTarefaPorCodigo(Long codigo) { 
-		Optional<Tarefa> tarefa = tarefas.stream().filter(t -> t.getCodigo() == codigo).findFirst();
-		if(Optional.ofNullable(tarefa).isPresent())
-			return tarefa.get();
-		else
-			return new Tarefa();
+	public Optional<Tarefa> listarTarefaPorCodigo(Long codigo) { 
+		Optional<Tarefa> tarefa = tarefaRepository.findById(codigo);
+		return tarefa;
 	}
 	
 	public void excluirTarefa(Long codigo) {
-		tarefas.removeIf(p -> p.getCodigo() == codigo);
+		tarefaRepository.deleteById(codigo);
 	}
 
 	public void atualizarStatusTarefa(Long codigo, String status) {
-		tarefas.stream().forEach(t -> {
-			if(t.getCodigo() == codigo) {
-				t.setStatus(status);
-			}
-		});
+		Optional<Tarefa> tarefa = listarTarefaPorCodigo(codigo);
+		if(Optional.ofNullable(tarefa).isPresent()) {
+			tarefa.get().setStatus(status);
+			tarefaRepository.save(tarefa.get());
+		}
+			
 	}
 	
 	
