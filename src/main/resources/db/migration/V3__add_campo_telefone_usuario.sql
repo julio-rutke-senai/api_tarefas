@@ -1,0 +1,1 @@
+ALTER TABLE public.usuario ADD COLUMN telefone character varying(255);

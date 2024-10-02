@@ -2,6 +2,8 @@ package rutke.julio.tarefas.entities;
 
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,8 +19,10 @@ public class Usuario {
 	private String nome;
 	private String email;
 	private String senha;
+	private String telefone;
 	
 	@OneToMany(mappedBy = "usuario")
+	@JsonIgnoreProperties("usuario")
 	private Set<Tarefa> tarefas;
 	
 	public Long getCodigo() {
@@ -50,6 +54,12 @@ public class Usuario {
 	}
 	public void setTarefas(Set<Tarefa> tarefas) {
 		this.tarefas = tarefas;
+	}
+	public String getTelefone() {
+		return telefone;
+	}
+	public void setTelefone(String telefone) {
+		this.telefone = telefone;
 	}
 
 }

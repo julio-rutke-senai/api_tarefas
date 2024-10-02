@@ -1,5 +1,7 @@
 package rutke.julio.tarefas.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,6 +20,7 @@ public class Tarefa {
 	
 	@ManyToOne
 	@JoinColumn(name = "usuario", nullable = false)
+	@JsonIgnoreProperties("tarefas")
 	private Usuario usuario;
 	
 	public Long getCodigo() {

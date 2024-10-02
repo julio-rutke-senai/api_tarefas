@@ -44,7 +44,7 @@ public class TarefaController {
 	public ResponseEntity<?> criarTarefa(@RequestBody CriarTarefaDTO tarefa){
 		try {
 			Tarefa tarefaCriada = tarefaService.criarTarefa(tarefa);
-			return ResponseEntity.ok(tarefa);
+			return ResponseEntity.ok(tarefaCriada);
 		}catch(Exception ex) {
 			return new ResponseEntity("Erro de Consulta", HttpStatusCode.valueOf(504));
 		}
