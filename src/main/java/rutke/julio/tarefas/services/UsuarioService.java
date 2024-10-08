@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import rutke.julio.tarefas.entities.Tarefa;
 import rutke.julio.tarefas.entities.Usuario;
+import rutke.julio.tarefas.entities.dtos.AlterarUsuarioDTO;
 import rutke.julio.tarefas.entities.dtos.AtualizarSenhaDTO;
 import rutke.julio.tarefas.repositories.UsuarioRepository;
 
@@ -29,9 +30,20 @@ public class UsuarioService {
 		return usuario;
 	}
 	
-	public Usuario atualizarUsuario(Usuario usuario) {
-		usuarioRepository.save(usuario);
-		return usuario;
+	public AlterarUsuarioDTO atualizarUsuario(AlterarUsuarioDTO alterarUsuarioDTO) throws Exception {
+		Optional<Usuario> usuario = usuarioRepository.findById(alterarUsuarioDTO.getCodigo());
+		
+		if(Optional.ofNullable(usuario).isPresent()) {
+			usuario.get().setEmail(alterarUsuarioDTO.getEmail());
+			usuario.get().setNome(alterarUsuarioDTO.getNome());
+			usuario.get().setPermissao(alterarUsuarioDTO.getPermissao());
+			usuario.get().setTelefone(alterarUsuarioDTO.getTelefone());
+			usuarioRepository.save(usuario.get());
+			
+			return alterarUsuarioDTO;
+		}
+		
+		throw new Exception("Usuário não existe!");
 	}
 	
 	public Usuario atualizarSenhaUsuario(AtualizarSenhaDTO senhaUsuario) {

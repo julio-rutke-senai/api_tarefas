@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import rutke.julio.tarefas.entities.Tarefa;
 import rutke.julio.tarefas.entities.Usuario;
+import rutke.julio.tarefas.entities.dtos.AlterarUsuarioDTO;
 import rutke.julio.tarefas.entities.dtos.AtualizarSenhaDTO;
 import rutke.julio.tarefas.services.UsuarioService;
 
@@ -52,7 +53,7 @@ public class UsuarioController {
 	}
 	
 	@PutMapping("/alterar")
-	public ResponseEntity<?> atualizarUsuario(@RequestBody Usuario usuario){
+	public ResponseEntity<?> atualizarUsuario(@RequestBody AlterarUsuarioDTO usuario){
 		try {
 			usuario = usuarioService.atualizarUsuario(usuario);
 			return ResponseEntity.ok(usuario);

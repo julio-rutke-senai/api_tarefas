@@ -23,6 +23,7 @@ public class SecurityConfig {
 				.csrf(c -> c.disable())
 				.authorizeHttpRequests(
                 authorizeConfig -> {
+                    authorizeConfig.requestMatchers("/usuario/**").hasRole("ADMIN");
                     authorizeConfig.requestMatchers("/tarefa/add").hasRole("ADMIN");
                     authorizeConfig.requestMatchers("/tarefa/alterar").hasRole("ADMIN");
                     authorizeConfig.requestMatchers("/tarefa/buscar").permitAll();
