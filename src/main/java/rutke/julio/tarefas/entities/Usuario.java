@@ -20,6 +20,7 @@ public class Usuario {
 	private String email;
 	private String senha;
 	private String telefone;
+	private String permissao;
 	
 	@OneToMany(mappedBy = "usuario")
 	@JsonIgnoreProperties("usuario")
@@ -60,6 +61,12 @@ public class Usuario {
 	}
 	public void setTelefone(String telefone) {
 		this.telefone = telefone;
+	}
+	public String getPermissao() {
+		return permissao;
+	}
+	public void setPermissao(String permissao) {
+		this.permissao = permissao;
 	}
 
 }

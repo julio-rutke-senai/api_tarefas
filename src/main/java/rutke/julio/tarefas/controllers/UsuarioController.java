@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import rutke.julio.tarefas.entities.Tarefa;
 import rutke.julio.tarefas.entities.Usuario;
+import rutke.julio.tarefas.entities.dtos.AtualizarSenhaDTO;
 import rutke.julio.tarefas.services.UsuarioService;
 
 @RestController
@@ -54,6 +55,17 @@ public class UsuarioController {
 	public ResponseEntity<?> atualizarUsuario(@RequestBody Usuario usuario){
 		try {
 			usuario = usuarioService.atualizarUsuario(usuario);
+			return ResponseEntity.ok(usuario);
+		}catch(Exception ex) {
+			return new ResponseEntity("Erro de Consulta", HttpStatusCode.valueOf(504));
+		}
+	}
+	
+
+	@PatchMapping("/alterar/senha")
+	public ResponseEntity<?> atualizarSenhaUsuario(@RequestBody AtualizarSenhaDTO atualizarSenhaDTO){
+		try {
+			Usuario usuario = usuarioService.atualizarSenhaUsuario(atualizarSenhaDTO);
 			return ResponseEntity.ok(usuario);
 		}catch(Exception ex) {
 			return new ResponseEntity("Erro de Consulta", HttpStatusCode.valueOf(504));

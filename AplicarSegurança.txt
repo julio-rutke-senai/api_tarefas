@@ -1,0 +1,10 @@
+- Dependência
+- SecurityConfig
+	- filterChain
+	- passwordEncoder
+- UserDetailsServiceCustom
+	- loadByUsername
+
+- Adicionar Atributo de Permissão na Entidade e no Banco (Migrations)
+
+- Adicionar Criptografia no Salvar

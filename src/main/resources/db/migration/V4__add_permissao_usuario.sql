@@ -1,0 +1,1 @@
+ALTER TABLE public.usuario ADD COLUMN permissao character varying(255) DEFAULT 'USER';
