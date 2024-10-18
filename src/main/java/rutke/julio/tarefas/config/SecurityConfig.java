@@ -2,7 +2,9 @@ package rutke.julio.tarefas.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -18,7 +20,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 	
 	@Bean
-	protected SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+	protected SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, AuthenticationManager authenticationManager) throws Exception {
 		return httpSecurity
 				.csrf(c -> c.disable())
 				.authorizeHttpRequests(
@@ -26,16 +28,22 @@ public class SecurityConfig {
                     authorizeConfig.requestMatchers("/usuario/**").hasRole("ADMIN");
                     authorizeConfig.requestMatchers("/tarefa/add").hasRole("ADMIN");
                     authorizeConfig.requestMatchers("/tarefa/alterar").hasRole("ADMIN");
-                    authorizeConfig.requestMatchers("/tarefa/buscar").permitAll();
                     authorizeConfig.anyRequest().authenticated();
                 }
-				).httpBasic(Customizer.withDefaults())
+				)
+                .addFilter(new JWTAuthenticationFilter(authenticationManager))
+                .addFilter(new JWTValidateFilter(authenticationManager))
 				.build();
 	}
     
 	@Bean
     PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
+    }
+	
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception{
+        return authenticationConfiguration.getAuthenticationManager();
     }
 
 }

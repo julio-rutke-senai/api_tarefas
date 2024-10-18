@@ -30,16 +30,7 @@ public class UserDetailsServiceCustom implements UserDetailsService {
         if(!usuario.isPresent())
             new UsernameNotFoundException("Usuário não encontrado!");
 
-        String role = usuario.get().getPermissao();
-        if(!role.startsWith("ROLE_"))
-        	role = "ROLE_"+role;
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role);
-        Set<GrantedAuthority> authorities = new HashSet();
-        authorities.add(authority);
-
-        User user = new User(usuario.get().getEmail(), usuario.get().getSenha(), authorities);
-
-        return user;
+        return new UserDetailsCustom(usuario);
     }
 	
 }
