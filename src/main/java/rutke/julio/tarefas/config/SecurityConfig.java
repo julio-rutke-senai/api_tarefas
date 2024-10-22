@@ -27,6 +27,7 @@ public class SecurityConfig {
                     authorizeConfig.requestMatchers("/tarefa/add").hasRole("ADMIN");
                     authorizeConfig.requestMatchers("/tarefa/alterar").hasRole("ADMIN");
                     authorizeConfig.requestMatchers("/tarefa/buscar").permitAll();
+                    authorizeConfig.requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll();
                     authorizeConfig.anyRequest().authenticated();
                 }
 				).httpBasic(Customizer.withDefaults())

@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.*;
 import rutke.julio.tarefas.entities.Tarefa;
 import rutke.julio.tarefas.entities.dtos.CriarTarefaDTO;
 import rutke.julio.tarefas.services.TarefaService;
